@@ -9,8 +9,8 @@ class Player
 	SDL_Point* ship;
 	SDL_Point pos;
 	SDL_Point prevPos;
-	int velocity1;
-	int velocity2;
+	int velocityX;
+	int velocityY;
 	float cosA;
 	float sinA;
 	float angle;

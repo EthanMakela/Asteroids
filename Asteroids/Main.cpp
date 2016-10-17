@@ -51,14 +51,10 @@ int main(int argc, char* args[])
 		if (rend == NULL) {
 			printf("Renderer could not be made SDL_Error: %s\n", SDL_GetError());
 		}
-		
-		 
-
 		while(isRunning){
 			while (SDL_PollEvent(&e)) {
 		
-				if (e.type == SDL_KEYDOWN)
-				{
+				if (e.type == SDL_KEYDOWN){
 					if (e.key.keysym.scancode == SDL_SCANCODE_UP)
 					{
 						//thrust
@@ -94,8 +90,7 @@ int main(int argc, char* args[])
 						exit(1); //for now just exiting on escape
 					}
 				}
-				if (e.type == SDL_KEYUP)
-				{
+				if (e.type == SDL_KEYUP){
 					if (e.key.keysym.scancode == SDL_SCANCODE_UP)
 					{
 						//thrust
@@ -130,11 +125,8 @@ int main(int argc, char* args[])
 			loops = 0;
 			deltaTime = float(SDL_GetTicks() - prevFrameTime) / 1000.0f; 
 
-			while (SDL_GetTicks() > nextFrameTime && loops < maxFrameSkip)
-			{
+			while (SDL_GetTicks() > nextFrameTime && loops < maxFrameSkip){
 				//update player and rock position
-				
-				
 				ship.UpdatePosition(deltaTime);
 				nextFrameTime += frameTimeinMS;
 				prevFrameTime = SDL_GetTicks();
@@ -142,16 +134,9 @@ int main(int argc, char* args[])
 			}
 			interpolation = float(SDL_GetTicks() + frameTimeinMS - nextFrameTime)
 				/ float(frameTimeinMS);
-
-			
 			int ip = int(interpolation * 10);
-
-			//deal with collisions
-
-			
-			if ((ip == 5 || ip == 0  || ip == 8) && ip != prevInterp) {//draws on 0% and 50%
-				
-				
+			//deal with collisions	
+			if ((ip == 5 || ip == 0 ) && ip != prevInterp) {//draws on 0% and 50%
 				ship.Interpolate(deltaTime, interpolation);
 				prevInterp = ip;
 				SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
@@ -160,9 +145,7 @@ int main(int argc, char* args[])
 				SDL_RenderPresent(rend);
 				//draweverything else
 			}
-
 		}
-
 	}
 	SDL_DestroyWindow(window);
 	SDL_Quit();
