@@ -4,18 +4,18 @@
 
 Player::Player()
 {
-	 pos = { 320,240 };
-	 prevPos = { 320, 240 };
-	 cosA = 0.0;
-	 sinA = 0.0;
-	 angle = 0.0;
-	 thrusting = false;
-	 rotatingRight = false;
-	 rotatingLeft = false;
-	 deaccelerating = false;
-	 ship = new SDL_Point[5];
+	pos = { 320,240 };
+	prevPos = { 320, 240 };
+	cosA = 0.0;
+	sinA = 0.0;
+	angle = 0.0;
+	thrusting = false;
+	rotatingRight = false;
+	rotatingLeft = false;
+	deaccelerating = false;
+	ship = new SDL_Point[5];
 
-	 this->draw();
+	this->draw();
 }
 
 
@@ -46,7 +46,7 @@ void Player::UpdatePosition(float& deltaTime) {
 			speed -= 1;
 		}
 		else speed -= abs(speed * 2);
-		if (speed < -3) speed = -3;	
+		if (speed < -3) speed = -3;
 	}
 	if (thrusting == false && deaccelerating == false) {
 		speed -= (speed * 2);
@@ -54,7 +54,7 @@ void Player::UpdatePosition(float& deltaTime) {
 	}
 	velocityX += speed * cosA;
 	velocityY += speed * sinA;
-	//deal with lefts n rights 
+	//deal with lefts n rights
 	if (rotatingLeft == true) angle += -0.2;
 	if (rotatingRight == true) angle += 0.2;
 	//set new positions
@@ -74,8 +74,8 @@ void Player::draw() {
 	sinA = sin(angle);
 
 	//top point/ front of ship
-	ship[0] = { int(cosA * (pos.x - 10 - pos.x)  + pos.x),
-		int(sinA * (pos.x - 10 - pos.x)  + pos.y) };
+	ship[0] = { int(cosA * (pos.x - 10 - pos.x) + pos.x),
+		int(sinA * (pos.x - 10 - pos.x) + pos.y) };
 	//bottom right
 	ship[1] = { int(cosA * (pos.x + 10 - pos.x) - sinA * (pos.y - 10 - pos.y) + pos.x),
 		int(sinA * (pos.x + 10 - pos.x) + cosA * (pos.y - 10 - pos.y) + pos.y) };
@@ -95,4 +95,5 @@ void Player::draw(SDL_Renderer* rend) {
 	SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
 	SDL_RenderDrawLines(rend, ship, 5);
 }
+
 
