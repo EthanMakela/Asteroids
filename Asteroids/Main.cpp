@@ -4,11 +4,12 @@
 #include <iostream>
 #include <ctime>
 #include "Player.h"
+#include "Asteroid.h"
 
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
-const int maxFrameSkip = 5;
+const int maxFrameSkip = 2;
 const int updatesPS = 30;
 const int frameTimeinMS = 1000 / updatesPS;
 
@@ -21,8 +22,7 @@ int main(int argc, char* args[])
 	SDL_Surface* screenSurface = NULL;
 	SDL_Renderer* rend = NULL;
 	SDL_Event e;
-	
-	
+
 	Uint32 nextFrameTime = SDL_GetTicks();
 	Uint32 prevFrameTime = SDL_GetTicks();
 
@@ -33,8 +33,8 @@ int main(int argc, char* args[])
 	float interpolation = 0;
 	int prevInterp = 0;
 	Player ship;
-
-
+	Asteroid firstRock;
+	int count = 0;
 	//Init
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
 	{
@@ -51,6 +51,8 @@ int main(int argc, char* args[])
 		if (rend == NULL) {
 			printf("Renderer could not be made SDL_Error: %s\n", SDL_GetError());
 		}
+		//inputs
+		
 		while(isRunning){
 			while (SDL_PollEvent(&e)) {
 		
@@ -124,9 +126,9 @@ int main(int argc, char* args[])
 			}
 			loops = 0;
 			deltaTime = float(SDL_GetTicks() - prevFrameTime) / 1000.0f; 
-
+			//update loop
 			while (SDL_GetTicks() > nextFrameTime && loops < maxFrameSkip){
-				//update player and rock position
+				//update rock position
 				ship.UpdatePosition(deltaTime);
 				nextFrameTime += frameTimeinMS;
 				prevFrameTime = SDL_GetTicks();
@@ -134,16 +136,21 @@ int main(int argc, char* args[])
 			}
 			interpolation = float(SDL_GetTicks() + frameTimeinMS - nextFrameTime)
 				/ float(frameTimeinMS);
+			
 			int ip = int(interpolation * 10);
 			//deal with collisions	
-			if ((ip == 5 || ip == 0 ) && ip != prevInterp) {//draws on 0% and 50%
+
+			//Draw everything
+			if ((ip == 2 || ip == 5 || ip == 8) && ip != prevInterp) {//draws on 20% and 50% and 80%
 				ship.Interpolate(deltaTime, interpolation);
 				prevInterp = ip;
 				SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
 				SDL_RenderClear(rend);
 				ship.draw(rend);
+				firstRock.Draw(rend);
+				//draw rocks and missles here
 				SDL_RenderPresent(rend);
-				//draweverything else
+				
 			}
 		}
 	}
