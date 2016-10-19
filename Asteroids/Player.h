@@ -7,17 +7,19 @@ using namespace std;
 class Player
 {
 	SDL_Point* ship;
-	SDL_Point pos;
+	
 	SDL_Point prevPos;
 	int velocityX;
 	int velocityY;
 	float cosA;
 	float sinA;
-	float angle;
+	
 	float speed;
 	
 
 public:
+	SDL_Point pos;
+	float angle;
 	bool thrusting;
 	bool rotatingRight;
 	bool rotatingLeft;

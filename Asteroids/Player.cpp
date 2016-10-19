@@ -74,20 +74,20 @@ void Player::draw() {
 	sinA = sin(angle);
 
 	//top point/ front of ship
-	ship[0] = { int(cosA * (pos.x - 10 - pos.x) + pos.x),
-		int(sinA * (pos.x - 10 - pos.x) + pos.y) };
+	ship[0] = { int(pos.x + cosA * -10),
+		int(pos.y + sinA * -10) };
 	//bottom right
-	ship[1] = { int(cosA * (pos.x + 10 - pos.x) - sinA * (pos.y - 10 - pos.y) + pos.x),
-		int(sinA * (pos.x + 10 - pos.x) + cosA * (pos.y - 10 - pos.y) + pos.y) };
+	ship[1] = { int(pos.x + 10 * cosA + 10 * sinA),
+		int(pos.y - 10 * cosA + 10 * sinA) };
 	//center bottom
-	ship[2] = { int(cosA * (pos.x + 5 - pos.x) + pos.x),
-		int(sinA * (pos.x + 5 - pos.x) + pos.y) };
+	ship[2] = { int(pos.x + 5 * cosA),
+		int(pos.y + 5 * sinA) };
 	//bottom left
-	ship[3] = { int(cosA * (pos.x + 10 - pos.x) - sinA * (pos.y + 10 - pos.y) + pos.x),
-		int(sinA * (pos.x + 10 - pos.x) + cosA * (pos.y + 10 - pos.y) + pos.y) };
+	ship[3] = { int(pos.x + 10 * cosA - 10 * sinA),
+		int(pos.y + 10 * cosA + 10 * sinA) };
 	//top/front of ship
-	ship[4] = { int(cosA * (pos.x - 10 - pos.x) + pos.x),
-		int(sinA * (pos.x - 10 - pos.x) + pos.y) };
+	ship[4] = { int(pos.x + cosA * -10),
+		int(pos.y + sinA * -10) };
 
 }
 

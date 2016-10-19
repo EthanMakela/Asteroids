@@ -1,6 +1,10 @@
 #pragma once
 #include <SDL.h>
 #include <iostream>
+#include <stdio.h>
+#include <cstdlib>
+#include <iostream>
+#include <ctime>
 
 using namespace std;
 
@@ -16,11 +20,15 @@ class Asteroid
 	float cosA;
 	float sinA;
 	float rotationFactor;
+	int randSpin;
+	int speed;
+	int random;
+	
 public:
 	Asteroid();
 	Asteroid(SDL_Renderer* rend);
 	~Asteroid();
-	void Update();
+	void UpdatePosition(float& deltaTime);
 	void Draw();
 	void Draw(SDL_Renderer* rend);
 	void Interpolate(float& deltaTime, float& ip);

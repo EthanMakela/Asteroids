@@ -5,6 +5,8 @@
 #include <ctime>
 #include "Player.h"
 #include "Asteroid.h"
+#include "Bullet.h"
+
 
 
 const int WIDTH = 640;
@@ -34,6 +36,8 @@ int main(int argc, char* args[])
 	int prevInterp = 0;
 	Player ship;
 	Asteroid firstRock;
+	Bullet bullet;
+	bool firing = false;
 	int count = 0;
 	//Init
 	if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
@@ -84,6 +88,8 @@ int main(int argc, char* args[])
 					if (e.key.keysym.scancode == SDL_SCANCODE_SPACE)
 					{
 						cout << "fire" << endl;
+						bullet.CreateNew(ship.pos , ship.angle);
+						bullet.fired = true;
 						//fire
 					}
 					else if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
@@ -129,6 +135,14 @@ int main(int argc, char* args[])
 			//update loop
 			while (SDL_GetTicks() > nextFrameTime && loops < maxFrameSkip){
 				//update rock position
+				if (bullet.fired == true) {
+					bullet.UpdatePosition(deltaTime);
+					if (SDL_GetTicks() - bullet.createTime > bullet.TTL) {
+						bullet.fired = false;
+						cout << "bullet removed" << endl;
+					}
+				}
+				firstRock.UpdatePosition(deltaTime);
 				ship.UpdatePosition(deltaTime);
 				nextFrameTime += frameTimeinMS;
 				prevFrameTime = SDL_GetTicks();
@@ -142,12 +156,17 @@ int main(int argc, char* args[])
 
 			//Draw everything
 			if ((ip == 2 || ip == 5 || ip == 8) && ip != prevInterp) {//draws on 20% and 50% and 80%
+				if (bullet.fired == true) {
+					bullet.Interpolate(deltaTime, interpolation);
+				}
 				ship.Interpolate(deltaTime, interpolation);
+				firstRock.Interpolate(deltaTime, interpolation);
 				prevInterp = ip;
 				SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
 				SDL_RenderClear(rend);
 				ship.draw(rend);
 				firstRock.Draw(rend);
+				bullet.Draw(rend);
 				//draw rocks and missles here
 				SDL_RenderPresent(rend);
 				
