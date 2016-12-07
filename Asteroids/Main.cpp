@@ -36,6 +36,8 @@ int main(int argc, char* args[])
 	int prevInterp = 0;
 	Player ship;
 	Asteroid firstRock;
+	Bullet* tempNextBullet = NULL;
+	Bullet* tempPrevBullet = NULL;
 	
 	bool firing = false;
 	int count = 0;
@@ -88,15 +90,37 @@ int main(int argc, char* args[])
 					if (e.key.keysym.scancode == SDL_SCANCODE_SPACE)
 					{
 						//cout << "fire" << endl;
-						Bullet* bullet = new Bullet;
-						bullet->CreateNew(ship.pos, ship.angle, ship.speed);
-						if (ship.activeShots > 0) {
-							bullet->prevBullet = ship.firedShots[ship.activeShots];
-						}
-						ship.firedShots[ship.activeShots] = bullet;
-						ship.activeShots++;
-						ship.firing = true;
-						cout << "bullet " << ship.activeShots - 1 << " fired" << endl;
+						
+							Bullet* bullet = new Bullet;
+							bullet->CreateNew(ship.pos, ship.angle, ship.speed);
+							
+						
+							if (tempPrevBullet != NULL) {
+								bullet->prevBullet = ship.firedShots[ship.activeShots-1];
+							}
+							else {
+								tempPrevBullet = bullet;
+								ship.firedShots[ship.activeShots] = bullet;
+								ship.firing = true;
+								bullet->prevBullet = NULL; // Not nessasary just for peace of mind
+								cout << "bullet " << ship.activeShots << " fired" << endl;
+
+								ship.activeShots++;
+
+							}
+							if (bullet->prevBullet != NULL ) {
+								if (SDL_GetTicks() - bullet->prevBullet->createTime > 600) {
+									tempPrevBullet = bullet;
+									ship.firedShots[ship.activeShots] = bullet;
+								
+									ship.firing = true;
+
+									cout << "bullet " << ship.activeShots << " fired" << endl;
+
+									ship.activeShots++;
+								}
+							}
+							
 						//fire
 					}
 					else if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)

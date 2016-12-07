@@ -28,6 +28,8 @@ Player::~Player()
 }
 
 
+
+
 void Player::Interpolate(float& deltaTime, float& ip) {
 	pos.x = prevPos.x - (velocityX * deltaTime) * ip;
 	pos.y = prevPos.y - (velocityY * deltaTime) * ip;

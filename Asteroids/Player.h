@@ -36,6 +36,7 @@ public:
 	void draw(SDL_Renderer* rend);
 	void UpdatePosition(float& deltaTime);
 	void Interpolate(float& deltaTime, float& ip);
+	
 
 	
 };
