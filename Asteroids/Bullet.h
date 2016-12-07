@@ -4,6 +4,7 @@
 
 
 
+
 using namespace std;
 
 class Bullet
@@ -25,11 +26,14 @@ class Bullet
 
 public:
 	bool fired;
+	bool activeBullet;
 	Uint32 createTime;
 	int TTL;
+	Bullet* nextBullet;
+	Bullet* prevBullet;
 
 	Bullet();
-	void CreateNew(SDL_Point shipCenter, float shipAngle );
+	void CreateNew(SDL_Point shipPos, int shipAngle, int shipSpeed);
 	void UpdatePosition(float& deltaTime );
 	void Interpolate(float& deltaTime, float& ip);
 	void Draw();

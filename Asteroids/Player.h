@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 #include <SDL.h>
+#include "Bullet.h"
+
 
 using namespace std;
 
@@ -13,9 +15,7 @@ class Player
 	int velocityY;
 	float cosA;
 	float sinA;
-	
-	float speed;
-	
+
 
 public:
 	SDL_Point pos;
@@ -24,6 +24,11 @@ public:
 	bool rotatingRight;
 	bool rotatingLeft;
 	bool deaccelerating;
+	bool firing;
+	Bullet** firedShots;
+	int activeShots;
+	float speed;
+
 
 	Player();
 	~Player();
@@ -31,5 +36,7 @@ public:
 	void draw(SDL_Renderer* rend);
 	void UpdatePosition(float& deltaTime);
 	void Interpolate(float& deltaTime, float& ip);
+
+	
 };
 

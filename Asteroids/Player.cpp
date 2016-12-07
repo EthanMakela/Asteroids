@@ -14,6 +14,9 @@ Player::Player()
 	rotatingLeft = false;
 	deaccelerating = false;
 	ship = new SDL_Point[5];
+	firedShots = new Bullet*[150];
+	activeShots = 0;
+	
 
 	this->draw();
 }
@@ -23,6 +26,7 @@ Player::~Player()
 {
 	delete ship;
 }
+
 
 void Player::Interpolate(float& deltaTime, float& ip) {
 	pos.x = prevPos.x - (velocityX * deltaTime) * ip;
