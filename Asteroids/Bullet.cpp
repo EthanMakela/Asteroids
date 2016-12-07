@@ -1,7 +1,5 @@
 #include "Bullet.h"
 
-
-
 Bullet::Bullet()
 {
 	speed = 100;
@@ -9,7 +7,6 @@ Bullet::Bullet()
 	pixel = new SDL_Point[2];
 	
 }
-
 
 Bullet::~Bullet()
 {
@@ -24,8 +21,8 @@ void Bullet::CreateNew(SDL_Point shipPoint, float shipAngle) {
 	pos.x += -10;
 	prevPos = pos;
 	createTime = SDL_GetTicks();
-	velocityX = speed * cosA;
-	velocityY = speed * sinA;
+	velocityX = speed * cosA * 2;
+	velocityY = speed * sinA * 2;
 	
 }
 
@@ -52,10 +49,10 @@ void Bullet::UpdatePosition(float& deltaTime) {
 }
 
 void Bullet::Draw() {
-	pixel[0] = { int(pos.x + cosA * -2),
-		int(pos.y + sinA * -2) };
-	pixel[1] = { int(pos.x + cosA * -2),
-		int(pos.y + sinA * -2) };
+	pixel[0] = { int(pos.x + cosA * -5),
+		int(pos.y + sinA * -5) };
+	pixel[1] = { int(pos.x + cosA * -5),
+		int(pos.y + sinA * -5) };
 }
 
 void Bullet::Draw(SDL_Renderer* rend) {
