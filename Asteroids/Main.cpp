@@ -15,6 +15,8 @@ const int maxFrameSkip = 2;
 const int updatesPS = 30;
 const int frameTimeinMS = 1000 / updatesPS;
 
+
+
 using namespace std;
 
 
@@ -34,10 +36,12 @@ int main(int argc, char* args[])
 	float deltaTime = 0;
 	float interpolation = 0;
 	int prevInterp = 0;
+	
 	Player ship;
 	Asteroid firstRock;
-	Bullet* tempNextBullet = NULL;
-	Bullet* tempPrevBullet = NULL;
+	Bullet* bullet = new Bullet;
+	
+	
 	
 	bool firing = false;
 	int count = 0;
@@ -88,40 +92,34 @@ int main(int argc, char* args[])
 						//rotate right
 					}
 					if (e.key.keysym.scancode == SDL_SCANCODE_SPACE)
-					{
-						//cout << "fire" << endl;
-						
-							Bullet* bullet = new Bullet;
+					{					
+						Bullet* bullet = new Bullet;						
+						for (int i = 0; i < ship.ammoStash; i++) {
+							if (ship.firedShots[i]->activeBullet == false) {
+								ship.nextOpen = i;
+							}
+						}
+						if (ship.tempPrevBullet != NULL) { //If not first bullet set the previously shot bullet 
+							bullet->prevBullet = ship.firedShots[ship.nextOpen];
+						}
+						else {
+							ship.tempPrevBullet = bullet; //Set this bullet as previous bullet for next
+							ship.firing = true;
+							bullet->activeBullet = true;
 							bullet->CreateNew(ship.pos, ship.angle, ship.speed);
-							
-						
-							if (tempPrevBullet != NULL) {
-								bullet->prevBullet = ship.firedShots[ship.activeShots-1];
-							}
-							else {
-								tempPrevBullet = bullet;
-								ship.firedShots[ship.activeShots] = bullet;
+							ship.firedShots[ship.nextOpen] = bullet;  //Put the bullet into the chamber
+							//cout << "first shot fired" << endl;
+						}
+						if (bullet->prevBullet != NULL) {
+							if (SDL_GetTicks() - bullet->prevBullet->createTime > 2000) { //20 Bullets 2 second load time 
+								ship.tempPrevBullet = bullet;
 								ship.firing = true;
-								bullet->prevBullet = NULL; // Not nessasary just for peace of mind
-								cout << "bullet " << ship.activeShots << " fired" << endl;
-
-								ship.activeShots++;
-
+								bullet->activeBullet = true;
+								bullet->CreateNew(ship.pos, ship.angle, ship.speed);
+								ship.firedShots[ship.nextOpen] = bullet;
+								//cout << "bullet " << ship.nextOpen << " fired" << endl;
 							}
-							if (bullet->prevBullet != NULL ) {
-								if (SDL_GetTicks() - bullet->prevBullet->createTime > 600) {
-									tempPrevBullet = bullet;
-									ship.firedShots[ship.activeShots] = bullet;
-								
-									ship.firing = true;
-
-									cout << "bullet " << ship.activeShots << " fired" << endl;
-
-									ship.activeShots++;
-								}
-							}
-							
-						//fire
+						}
 					}
 					else if (e.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
 					{
@@ -171,11 +169,12 @@ int main(int argc, char* args[])
 				//update rock position
 				firstRock.UpdatePosition(deltaTime);
 				ship.UpdatePosition(deltaTime);
-				for (int i = 0; i < ship.activeShots; i++) {
-					ship.firedShots[i]->UpdatePosition(deltaTime);			
+				for (int i = 0; i < ship.ammoStash; i++) {
+					if (ship.firedShots[i]->activeBullet == true) {
+						ship.firedShots[i]->UpdatePosition(deltaTime);
 						
+					}
 				}
-				
 				nextFrameTime += frameTimeinMS;
 				prevFrameTime = SDL_GetTicks();
 				loops++;
@@ -184,33 +183,37 @@ int main(int argc, char* args[])
 				/ float(frameTimeinMS);
 			
 			int ip = int(interpolation * 10);
+
 			//deal with collisions	
 
-			//Draw everything
-			if ((ip == 2 || ip == 5 || ip == 8) && ip != prevInterp) {//draws on 20% and 50% and 80%
+			if ((ip == 2 || ip == 8) && ip != prevInterp) {//draws on 20% and 50% and 80%
 				
-				ship.Interpolate(deltaTime, interpolation);
-				firstRock.Interpolate(deltaTime, interpolation);
-				for (int i = 0; i < ship.activeShots; i++) {
+				ship.Interpolate(deltaTime, interpolation); //Interpolate the ship
+				firstRock.Interpolate(deltaTime, interpolation); //Interpolate the first Rock
+				for (int i = 0; i < ship.ammoStash; i++) {
 					if ( ship.firedShots[i]->activeBullet == true) {
+						
+						ship.firedShots[i]->Interpolate(deltaTime, interpolation); //Interpolate the list of bullets
+						
+							if (SDL_GetTicks() - ship.firedShots[i]->createTime > ship.firedShots[i]->TTL) {
+								ship.firedShots[i]->activeBullet = false;
 
-						ship.firedShots[i]->Interpolate(deltaTime, interpolation);
-						if (SDL_GetTicks() - ship.firedShots[i]->createTime > ship.firedShots[i]->TTL) {
-							
-							ship.firedShots[i]->activeBullet = false;
-							delete ship.firedShots[i];
-							ship.activeShots--;
-							cout << "bullet " << i << " removed" << endl;
+								ship.activeShots--;
+
+								//Small leak looses a few bullets into mem needs attention but all bullets stop rendering after ttl
+								cout << "bullet " << i << " removed" << endl;
+
+							}
 						}
-					}
+					
 				}
 				prevInterp = ip;
 				SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
 				SDL_RenderClear(rend);
 				ship.draw(rend);
 				firstRock.Draw(rend);
-				for (int i = 0; i < ship.activeShots; i++) {
-					if (ship.firedShots[i]->activeBullet == true) {
+				for (int i = 0; i < ship.ammoStash; i++) {
+					if (ship.firedShots[i]->activeBullet == true ) {
 						ship.firedShots[i]->Draw(rend);
 					}
 				}
@@ -223,5 +226,7 @@ int main(int argc, char* args[])
 	}
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+	delete bullet;
 	return 0;
 }
+

@@ -31,6 +31,7 @@ public:
 	int TTL;
 	Bullet* nextBullet;
 	Bullet* prevBullet;
+	bool hasBeenDrawn;
 
 	Bullet();
 	void CreateNew(SDL_Point shipPos, int shipAngle, int shipSpeed);

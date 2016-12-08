@@ -14,9 +14,15 @@ Player::Player()
 	rotatingLeft = false;
 	deaccelerating = false;
 	ship = new SDL_Point[5];
-	firedShots = new Bullet*[150];
+	firedShots = new Bullet*[ammoStash];
+	for (int i = 0; i < ammoStash; i++) {
+		Bullet* bullet = new Bullet;
+		firedShots[i] = bullet;
+	}
 	activeShots = 0;
-	
+	tempPrevBullet = NULL;
+	tempNextBullet = NULL;
+	nextOpen = 0;
 
 	this->draw();
 }
@@ -25,6 +31,10 @@ Player::Player()
 Player::~Player()
 {
 	delete ship;
+	for (int i = 0; i < ammoStash; i++) {
+		delete firedShots[i];
+	}
+	delete firedShots;
 }
 
 

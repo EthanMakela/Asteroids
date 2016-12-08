@@ -4,6 +4,7 @@ Bullet::Bullet()
 {
 	
 	pixel = new SDL_Point[2];
+	activeBullet = false;
 	
 }
 
@@ -27,7 +28,7 @@ void Bullet::CreateNew(SDL_Point shipPos, int shipAngle, int shipSpeed) {
 	createTime = SDL_GetTicks();
 	velocityX = speed * cosA * 2;
 	velocityY = speed * sinA * 2;
-	activeBullet = true;
+	hasBeenDrawn = false;
 	nextBullet = NULL;
 	prevBullet = NULL;
 	

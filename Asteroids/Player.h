@@ -28,6 +28,10 @@ public:
 	Bullet** firedShots;
 	int activeShots;
 	float speed;
+	const int ammoStash = 20;
+	Bullet* tempNextBullet;
+	Bullet* tempPrevBullet;
+	int nextOpen;
 
 
 	Player();
