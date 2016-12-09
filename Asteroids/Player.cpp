@@ -20,13 +20,33 @@ Player::Player()
 		firedShots[i] = bullet;
 	}
 	activeShots = 0;
+	lives = 3;
 	tempPrevBullet = NULL;
 	tempNextBullet = NULL;
 	nextOpen = 0;
-
+	collisionRect = new SDL_Rect[4];
+	isAlive = true;
 	this->draw();
 }
 
+void Player::newShip() {
+	lives--;
+	pos = { 320,240 };
+	prevPos = { 320, 240 };
+	cosA = 0.0;
+	sinA = 0.0;
+	angle = 0.0;
+	thrusting = false;
+	rotatingRight = false;
+	rotatingLeft = false;
+	deaccelerating = false;
+	activeShots = 0;
+	tempPrevBullet = NULL;
+	tempNextBullet = NULL;
+	nextOpen = 0;
+	isAlive = true;
+	this->draw();
+}
 
 Player::~Player()
 {
@@ -35,6 +55,8 @@ Player::~Player()
 		delete firedShots[i];
 	}
 	delete firedShots;
+	delete[] collisionRect;
+
 }
 
 
@@ -104,6 +126,20 @@ void Player::draw() {
 	//top/front of ship
 	ship[4] = { int(pos.x + cosA * -10),
 		int(pos.y + sinA * -10) };
+	
+	collisionRect[0] = { int(pos.x + cosA * -10),
+		int(pos.y + sinA * -10),
+		2,2 };
+
+	collisionRect[1] = { int(pos.x + 10 * cosA - 10 * sinA),
+		int(pos.y + 10 * cosA + 10 * sinA),
+		2,2 };
+
+	collisionRect[2] = { int(pos.x + 10 * cosA + 10 * sinA),
+		int(pos.y - 10 * cosA + 10 * sinA),
+		2,2 };
+	collisionRect[3] = { int(pos.x + 5 * cosA),
+		int(pos.y + 5 * sinA) };
 
 }
 

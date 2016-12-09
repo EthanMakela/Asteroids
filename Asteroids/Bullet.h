@@ -12,7 +12,7 @@ class Bullet
 	SDL_Point* pixel;
 	SDL_Point pos;
 	SDL_Point prevPos;
-
+	SDL_Point spawn;
 	
 
 	float cosA;
@@ -34,11 +34,12 @@ public:
 	bool hasBeenDrawn;
 
 	Bullet();
-	void CreateNew(SDL_Point shipPos, int shipAngle, int shipSpeed);
+	void CreateNew(SDL_Point shipPos, int shipAngle, int shipSpeed,  int shipVx, int shipVy);
 	void UpdatePosition(float& deltaTime );
 	void Interpolate(float& deltaTime, float& ip);
 	void Draw();
 	void Draw(SDL_Renderer* rend);
 	~Bullet();
+	inline SDL_Point getPos() { return pos; }
 };
 

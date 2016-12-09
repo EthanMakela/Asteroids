@@ -13,6 +13,7 @@ class Asteroid
 	SDL_Point* rockPoints;
 	SDL_Point pos;
 	SDL_Point prevPos;
+	
 	int size;
 	float angle;
 	float velocityX;
@@ -26,12 +27,14 @@ class Asteroid
 	
 public:
 	Asteroid();
-	Asteroid(SDL_Renderer* rend);
+	//Asteroid(SDL_Renderer* rend);
 	~Asteroid();
 	void UpdatePosition(float& deltaTime);
 	void Draw();
 	void Draw(SDL_Renderer* rend);
 	void Interpolate(float& deltaTime, float& ip);
-	void Remove();
+	//void Remove();
+	inline SDL_Point* getLines() { return rockPoints; }
+	inline SDL_Point getPos() { return pos; }
 };
 

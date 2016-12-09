@@ -13,21 +13,23 @@ Bullet::~Bullet()
 	delete pixel;
 }
 
-void Bullet::CreateNew(SDL_Point shipPos, int shipAngle, int shipSpeed) {
+void Bullet::CreateNew(SDL_Point shipPos, int shipAngle, int shipSpeed, int shipVx, int shipVy) {
 	shotAngle = shipAngle;
 	if (shipSpeed > 3) {
-		speed = 20 * shipSpeed;
+		speed = 10 * shipSpeed;
 	}
 	else speed = 50;
 	TTL = 2000;
 	cosA = cos(shotAngle);
-	sinA = sin(shotAngle);
-	pos = shipPos;
-	pos.x += -10;
+	sinA = sin(shotAngle); 
+	spawn = { int(cosA * (shipPos.x - 20 - shipPos.x) - sinA * (shipPos.y - shipPos.y) + shipPos.x),
+		int(sinA * (shipPos.x - 20 - shipPos.x) + cosA * (shipPos.y - shipPos.y) + shipPos.y) };
+	pos = spawn;
+	
 	prevPos = pos;
 	createTime = SDL_GetTicks();
-	velocityX = speed * cosA * 2;
-	velocityY = speed * sinA * 2;
+	velocityX =  shipVx + 300 * cosA;
+	velocityY =  shipVy + 300 * sinA;
 	hasBeenDrawn = false;
 	nextBullet = NULL;
 	prevBullet = NULL;

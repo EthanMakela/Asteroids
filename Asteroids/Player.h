@@ -11,8 +11,8 @@ class Player
 	SDL_Point* ship;
 	
 	SDL_Point prevPos;
-	int velocityX;
-	int velocityY;
+	
+	
 	float cosA;
 	float sinA;
 
@@ -32,6 +32,13 @@ public:
 	Bullet* tempNextBullet;
 	Bullet* tempPrevBullet;
 	int nextOpen;
+	const int reloadTime = 2000;
+	int velocityX;
+	int velocityY;
+	SDL_Rect* collisionRect;
+	bool isAlive;
+	void newShip();
+	int lives;
 
 
 	Player();
