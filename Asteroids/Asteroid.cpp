@@ -23,7 +23,7 @@ Asteroid::Asteroid()
 
 Asteroid::~Asteroid()
 {
-	delete rockPoints;
+	delete[] rockPoints;
 }
 
 void Asteroid::UpdatePosition(float& deltaTime) {

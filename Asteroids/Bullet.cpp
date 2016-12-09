@@ -10,7 +10,7 @@ Bullet::Bullet()
 
 Bullet::~Bullet()
 {
-	delete pixel;
+	delete[] pixel;
 }
 
 void Bullet::CreateNew(SDL_Point shipPos, int shipAngle, int shipSpeed, int shipVx, int shipVy) {

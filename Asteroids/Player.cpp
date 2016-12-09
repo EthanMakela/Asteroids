@@ -50,12 +50,13 @@ void Player::newShip() {
 
 Player::~Player()
 {
-	delete ship;
+	
 	for (int i = 0; i < ammoStash; i++) {
 		delete firedShots[i];
 	}
 	delete firedShots;
 	delete[] collisionRect;
+	delete ship;
 
 }
 
