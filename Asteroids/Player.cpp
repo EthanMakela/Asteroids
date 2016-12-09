@@ -45,6 +45,7 @@ void Player::newShip() {
 	tempNextBullet = NULL;
 	nextOpen = 0;
 	isAlive = true;
+	cout << "Lives left: " << lives << endl;
 	this->draw();
 }
 

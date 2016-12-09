@@ -194,7 +194,7 @@ int main(int argc, char* args[])
 			for (int i = 0; i < ship->ammoStash; i++) {
 				if (ship->firedShots[i]->activeBullet) {
 					SDL_Rect colBox = { int(ship->firedShots[i]->getPos().x), int(ship->firedShots[i]->getPos().y), 10, 10 };
-					for (int j = 0; j < 9; j++) {
+					for (int j = 0; j < 9; j++) { //collisoin with rocks
 						if (SDL_IntersectRectAndLine(&colBox,
 							&firstRock.getLines()[j].x,
 							&firstRock.getLines()[j].y,
@@ -202,11 +202,11 @@ int main(int argc, char* args[])
 							&firstRock.getLines()[j + 1].y)) {
 							cout << "Direct Hit" << endl;
 							ship->firedShots[i]->activeBullet = false;
-							cout << "Bullet " << i << " removed" << endl;
+							//cout << "Bullet " << i << " removed" << endl;
 
 						}
 					}
-					for (int h = 0; h < 3; h++) {
+					for (int h = 0; h < 3; h++) {//collision with yourself
 						if (SDL_IntersectRectAndLine(&colBox,
 							&ship->collisionRect[h].x,
 							&ship->collisionRect[h].y,
@@ -215,13 +215,12 @@ int main(int argc, char* args[])
 							cout << "You shot yourself" << endl;
 							ship->firedShots[i]->activeBullet = false;
 							ship->isAlive = false;
-							cout << "Bullet " << i << " removed" << endl;
+							//cout << "Bullet " << i << " removed" << endl;
 						}
 					}
 				}
 			}
-			if ((ip == 2 || ip == 8) && ip != prevInterp) {//draws on 20% and 50% and 80%
-				
+			if ((ip == 2 || ip == 8) && ip != prevInterp) {//draws on 20% and 50% and 80%				
 				ship->Interpolate(deltaTime, interpolation); //Interpolate the ship
 				firstRock.Interpolate(deltaTime, interpolation); //Interpolate the first Rock
 				for (int i = 0; i < ship->ammoStash; i++) {
@@ -229,7 +228,7 @@ int main(int argc, char* args[])
 						ship->firedShots[i]->Interpolate(deltaTime, interpolation); //Interpolate the list of bullets						
 							if (SDL_GetTicks() - ship->firedShots[i]->createTime > ship->firedShots[i]->TTL) {
 								ship->firedShots[i]->activeBullet = false;
-								cout << "bullet " << i << " removed" << endl;
+								//cout << "bullet " << i << " removed" << endl;
 							}
 						}					
 				}
@@ -238,8 +237,9 @@ int main(int argc, char* args[])
 						cout << "GAME OVER" << endl;
 						isRunning = false;// for now until a hud is made
 					}
-					cout << "Lives left: " << ship->lives - 1 << endl;
-					ship->newShip();
+					else {
+						ship->newShip();
+					}
 				}
 				prevInterp = ip;
 				SDL_SetRenderDrawColor(rend, 0, 0, 0, 255);
@@ -251,7 +251,6 @@ int main(int argc, char* args[])
 						ship->firedShots[i]->Draw(rend);
 					}
 				}				
-				//draw rocks here
 				SDL_RenderPresent(rend);				
 			}
 		}

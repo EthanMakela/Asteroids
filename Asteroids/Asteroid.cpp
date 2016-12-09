@@ -62,8 +62,8 @@ void Asteroid::Draw() {
 	cosA = cos(angle);
 	sinA = sin(angle);
 	
-	rockPoints[0] = { int(pos.x + random * sinA),
-		int(pos.y - random * cosA) };
+	rockPoints[0] = { int(pos.x + 15 * sinA),
+		int(pos.y - 15 * cosA) };
 
 	rockPoints[1] = { int(pos.x + 30 * cosA + 40 * sinA),
 		int(pos.y - 40 * cosA + 30 * sinA) };
@@ -89,6 +89,6 @@ void Asteroid::Draw() {
 	rockPoints[8] = { int(pos.x - 10 * cosA + 15 * sinA),
 		int(pos.y - 15 * cosA - 10 * sinA) };
 	
-	rockPoints[9] = { int(pos.x + random * sinA),
-		int(pos.y - random * cosA) };
+	rockPoints[9] = { int(pos.x + 15 * sinA),
+		int(pos.y - 15 * cosA) };
 }
